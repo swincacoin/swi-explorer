@@ -1,8 +1,10 @@
 
 require('babel-polyfill');
 const blockchain = require('../lib/blockchain');
+const config = require('../config');
 const { exit, rpc } = require('../lib/cron');
 const { forEachSeries } = require('p-iteration');
+const { IncomingWebhook } = require('@slack/client');
 const locker = require('../lib/locker');
 const util = require('./util');
 // Models.
@@ -22,11 +24,12 @@ async function syncBlocks(start, stop, clean = false) {
     await UTXO.remove({ blockHeight: { $gte: start, $lte: stop } });
   }
 
+  let block;
   for(let height = start; height <= stop; height++) {
     const hash = await rpc.call('getblockhash', [height]);
     const rpcblock = await rpc.call('getblock', [hash]);
 
-    const block = new Block({
+    block = new Block({
       hash,
       height,
       bits: rpcblock.bits,
@@ -35,7 +38,7 @@ async function syncBlocks(start, stop, clean = false) {
       diff: rpcblock.difficulty,
       merkle: rpcblock.merkleroot,
       nonce: rpcblock.nonce,
-      prev: rpcblock.prevblockhash ? rpcblock.prevblockhash : 'GENESIS',
+      prev: (rpcblock.height == 1) ? 'GENESIS' : rpcblock.previousblockhash ? rpcblock.previousblockhash : 'UNKNOWN',
       size: rpcblock.size,
       txs: rpcblock.tx ? rpcblock.tx : [],
       ver: rpcblock.version
@@ -54,6 +57,59 @@ async function syncBlocks(start, stop, clean = false) {
     });
 
     console.log(`Height: ${ block.height } Hash: ${ block.hash }`);
+  }
+
+  // Post an update to slack incoming webhook if url is
+  // provided in config.js.
+  if (block && !!config.slack.url) {
+    const webhook = new IncomingWebhook(config.slack.url);
+    const superblock = await rpc.call('getnextsuperblock');
+    const finalBlock = superblock - 1920;
+
+    let text = '';
+    // If finalization period is within 12 hours (12 * 60 * 60) / 90 = 480
+    if (block.height == (finalBlock - 480)) {
+      text = `
+      Finalization window starts in 12 hours.\n
+      \n
+      Current block: ${block.height}\n
+      Finalization block: ${finalBlock}\n
+      Budget payment block: ${superblock}\n
+      https://explorer.bulwarkcrypto.com/#/block/${block.height}\n
+      `;
+    }
+    // If finalization block.
+    else if (block.height == finalBlock) {
+      text = `
+      Finalization block!\n
+      \n
+      Block: ${block.height}\n
+      https://explorer.bulwarkcrypto.com/#/block/${block.height}\n
+      `;
+    }
+    // If budget payment block start then notify.
+    else if (block.height == superblock) {
+      text = `
+      Governance payment(s) started!\n
+      \n
+      Block: ${block.height}\n
+      https://explorer.bulwarkcrypto.com/#/block/${block.height}\n
+      `;
+    }
+    // Just every block for now while testing.
+    else {
+      text = `Block: ${block.height}\n`;
+    }
+
+    if (!!text) {
+      webhook.send(text, (err, res) => {
+        if (err) {
+          console.log('Slack Error:', err);
+          return;
+        }
+        console.log('Slack Message:', res);
+      });
+    }
   }
 }
 
