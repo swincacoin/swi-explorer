@@ -16,66 +16,66 @@ const CardROI = ({ coin, supply }) => {
     <Card>
       <div className="mb-3">
         <div className="h3">
-          { coin.mnsOn } / { mns }
-        </div>
-        <div className="h5">
           Active/Total Masternodes
         </div>
+        <div className="h5">
+          { coin.mnsOn } / { mns }
+        </div>
       </div>
       <div className="mb-3">
         <div className="h3">
-          { numeral(roi).format('0,0.0000') }%
-        </div>
-        <div className="h5">
           Estimated ROI
         </div>
+        <div className="h5">
+          { numeral(roi).format('0,0.0000') }%
+        </div>
       </div>
       <div className="mb-3">
         <div className="h3">
-          { numeral(supply ? supply.t : 0.0).format('0,0.0000') } BWK
-        </div>
-        <div className="h5">
           Coin Supply (Total)
         </div>
+        <div className="h5">
+          { numeral(supply ? supply.t : 0.0).format('0,0.0000') } SWI
+        </div>
       </div>
       <div className="mb-3">
         <div className="h3">
-          { numeral(supply ? supply.c - (mns * mncoins) : 0.0).format('0,0.0000') } BWK
-        </div>
-        <div className="h5">
           Coin Supply (Circulating)
         </div>
+        <div className="h5">
+          { numeral(supply ? supply.c - (mns * mncoins) : 0.0).format('0,0.0000') } SWI
+        </div>
       </div>
       <div className="mb-3">
         <div className="h3">
-          { numeral(coin.cap * coin.btc).format('0,0.0000') } BTC
-        </div>
-        <div className="h5">
           Market Cap BTC
         </div>
+        <div className="h5">
+          Coming soon !
+        </div>
       </div>
       <div className="mb-3">
         <div className="h3">
-          { numeral(coin.cap).format('$0,0.00') }
-        </div>
-        <div className="h5">
           Market Cap USD
         </div>
+        <div className="h5">
+          Coming soon !
+        </div>
       </div>
       <div className="mb-3">
         <div className="h3">
-          { numeral(mns * mncoins).format('0,0.0000') } BWK
-        </div>
-        <div className="h5">
           Coins Locked
         </div>
+        <div className="h5">
+          { numeral(mns * mncoins).format('0,0.0000') } SWI
+        </div>
       </div>
       <div className="mb-3">
         <div className="h3">
-          { numeral(mncoins * coin.btc).format('0,0.0000') } BTC / { numeral(mncoins * coin.usd).format('$0,0.00') }
+          Masternode Worth
         </div>
         <div className="h5">
-          Masternode Worth
+          Coming soon !
         </div>
       </div>
     </Card>

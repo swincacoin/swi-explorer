@@ -37,40 +37,7 @@ export default class CardStatus extends Component {
     const dirArrow = isPos ? 'arrow-up' : 'arrow-down';
 
     return (
-      <div className="animated fadeInUp">
-      <Card className="card--market" title="Market">
-        <p className="card__data-main bariol">
-          <CountUp
-            decimals={ 2 }
-            duration={ 1 }
-            end={ this.props.usd }
-            prefix={ 'BWK $' }
-            start={ 0 } />
-        </p>
-        <p className="card__data-sub">{ this.props.btc } BTC</p>
-        <div className="card__info row">
-          <div className="col-sm-12 col-md-6 col-lg-4">
-            <p>
-              <span
-                className={ `u--text-${ isPos ? 'green' : 'red' }` }
-                key={ dirArrow }>
-                <Icon className="card__icon--arrow" name={ dirArrow } />
-                <span>{ numeral(growth * 100.0).format('0,0.00') }% &nbsp;</span>
-              </span>
-              <span>In { this.props.xAxis.length * 5 } minutes</span>
-            </p>
-            <p className="card__info-source">Data from CoinMarketCap</p>
-          </div>
-          <div className="col-sm-12 col-md-6 col-lg-8">
-            <GraphLine
-              color={ isPos ? '#61d75e' : '#ed1c24' }
-              data={ this.props.yAxis.reverse() }
-              height="77px"
-              labels={ this.props.xAxis.reverse() } />
-          </div>
-        </div>
-      </Card>
-      </div>
+	  <div></div>
     );
   };
 }

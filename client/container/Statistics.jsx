@@ -151,16 +151,7 @@ class Statistics extends Component {
           </div>
           <div className="row">
             <div className="col-md-12 col-lg-6">
-              <h3>Bulwark Price USD</h3>
-              <h4>{ numeral(this.props.coin.usd).format('$0,0.00') } { day }</h4>
-              <h5>{ numeral(this.props.coin.btc).format('0.00000000') } BTC</h5>
-              <div>
-                <GraphLineFull
-                  color="#1991eb"
-                  data={ Array.from(prices.values()).slice(1, -1) }
-                  height="420px"
-                  labels={ Array.from(prices.keys()).slice(1, -1) } />
-              </div>
+              <h3>Swi Price USD - Coming soon</h3>
             </div>
             <div className="col-md-12 col-lg-6">
               <h3>Masternodes Online Last 7 Days</h3>

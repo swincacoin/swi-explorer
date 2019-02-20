@@ -1,6 +1,6 @@
 .menu-desktop {
 
-	background: rgb(41, 77, 234);
+	background: $orange;
 
 	box-shadow: #7d7d7d 0px 0px 16px;
 	color: $white;
@@ -76,9 +76,9 @@
 
 	&__logo {
 		height: auto;
-		margin-right: 2em;
+		margin-right: 0.5em;
 		/* Used to align with searchbar */
-		width: 140px;
+		width: 190px;
 	}
 
 	&__title {
